@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>照片派送</title>
+    <style>
+        /* 样式部分保持不变 */
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+            overflow-y: auto; /* 启用垂直滚动条 */
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 2px solid #4CAF50;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            position: relative;
+        }
+
+        th {
+            background-color: #0099ff;
+            color: white;
+        }
+
+        td:first-child {
+            color: blue;
+        }
+
+        td:nth-child(2):hover::after {
+            content: attr(data-address);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            z-index: 1;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .toggle-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .toggle-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .toggle-buttons button:hover {
+            background-color: #357835; /* 修改按钮 hover 时的背景颜色 */
+        }
+
+        .navigate-button {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .navigate-button:hover {
+            background-color: #357835; /* 修改导航按钮 hover 时的背景颜色 */
+        }
+
+        @media screen and (max-width: 600px) {
+            /* 在屏幕宽度小于600px时调整按钮样式 */
+            .toggle-buttons button {
+                width: 100%; /* 使按钮占据整行 */
+                box-sizing: border-box; /* 防止按钮宽度超过父容器 */
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 切换按钮 -->
+    <div class="toggle-buttons">
+        <button onclick="toggleTable(1)" style="flex: 1;">线路4</button>
+        <button onclick="toggleTable(2)" style="flex: 1;">线路3</button>
+    </div>
+
+    <!-- 第一个表格 -->
+    <table id="table1">
+        <tr>
+            <th>名称</th>
+            <th>店铺名</th>
+            <th>导航</th>
+        </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="抚琴南路15号">玉锋</td>
+        <td data-address="抚琴南路15号">玉峰印务广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.674294,104.044006', '玉锋')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="青羊东二路17号">心怡</td>
+        <td data-address="青羊东二路17号">心怡体育彩票</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.670086,104.04548', '心怡')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="西安北路104号">新视线</td>
+        <td data-address="西安北路104号">鑫视线影视</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.670987,104.048393', '新视线')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="锦里西路68号附18号">丽景</td>
+        <td data-address="锦里西路68号附18号">丽景数码制作冲印</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.653551,104.049074', '丽景')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="金河路65号附1号">麒麟</td>
+        <td data-address="金河路65号附1号">麒麟数码影像制作</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.660528,104.052043', '麒麟')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="东胜街6号">生生</td>
+        <td data-address="东胜街6号">生生影像</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.660413,104.060051', '生生')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="下同仁路117号附4号">长兴</td>
+        <td data-address="下同仁路117号附4号">长兴图片社</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.66654,104.051886', '长兴')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="实业街21号附2号">庆盈</td>
+        <td data-address="实业街21号附2号">兴庆盈广告印务部</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.665914,104.054081', '庆盈')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="四道街17号附5">星光</td>
+        <td data-address="四道街17号附5">星光数码图片社</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.672194,104.054039', '星光')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="过街楼街与横过街楼街交叉口南80米">靓影红墙巷</td>
+        <td data-address="过街楼街与横过街楼街交叉口南80米">红墙相馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.669077,104.05933', '靓影红墙巷')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="树德里2号附6号">中正</td>
+        <td data-address="树德里2号附6号">中正图文</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.674526,104.058659', '中正')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="树德里2号">美懿</td>
+        <td data-address="树德里2号">美懿&奥美</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.674526,104.058659', '美懿')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="王家塘街12号">乘龙</td>
+        <td data-address="王家塘街12号">小区左手</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.672782,104.063739', '乘龙')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="人民中路三段55号">新光</td>
+        <td data-address="人民中路三段55号">新光影像馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.676736,104.07143', '新光')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="马家花园路21号附3号">兴怡</td>
+        <td data-address="马家花园路21号附3号">诚信广告图文(兴怡)</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.683824,104.052255', '兴怡')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="人民北路一段25号附6号">派一</td>
+        <td data-address="人民北路一段25号附6号">派一图文输出</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.683297,104.072974', '派一')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="一环路北三段74号">长鸿</td>
+        <td data-address="一环路北三段74号">长鸿图文</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.683181,104.080694', '长鸿')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="星辉中路16号">泽准</td>
+        <td data-address="星辉中路16号">泽准印务</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.674676,104.082342', '泽准')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="马鞍北路55号">视悦</td>
+        <td data-address="马鞍北路55号">视悦.小区</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.678483,104.088153', '视悦')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="马鞍北路35号">渝东</td>
+        <td data-address="马鞍北路35号">渝东图文</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.676783,104.087043', '渝东')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="马鞍街82号">新凯</td>
+        <td data-address="马鞍街82号">新凯广告装饰</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.67803,104.091349', '新凯')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="府青路二段18号">月光</td>
+        <td data-address="府青路二段18号">月光照相馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.683063,104.0997', '月光')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="平安正街55号">歆雨</td>
+        <td data-address="平安正街55号">歆雨文印广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.683373,104.094555', '歆雨')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="华油路二段133号">天利</td>
+        <td data-address="华油路二段133号">天利图文广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.680927,104.094281', '天利')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="小市巷90号">艺影5</td>
+        <td data-address="小市巷90号">艺影照相馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.700951,104.074751', '艺影5')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="福祥街51号">蜀人</td>
+        <td data-address="福祥街51号">蜀人像馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.704793,104.072563', '蜀人')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="花径路5号">凝靓</td>
+        <td data-address="花径路5号">凝靓婚纱婚庆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.704091,104.072299', '凝靓')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="花径路114号">创意5</td>
+        <td data-address="花径路114号">创意像馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.706527,104.07231', '创意5')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="花径路137号">时代</td>
+        <td data-address="花径路137号">时代摄影部</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.708103,104.072056', '时代')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="站北中街16号">启凡</td>
+        <td data-address="站北中街16号">启凡广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.706677,104.072908', '启凡')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="八里桥路196号">彬彬</td>
+        <td data-address="八里桥路196号">彬彬时尚婚纱</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.705767,104.07606', '彬彬')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="东沙街79号">影艺</td>
+        <td data-address="东沙街79号">影艺照相馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.706222,104.076497', '影艺')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="东沙街100号">晓梅</td>
+        <td data-address="东沙街100号">晓梅摄影部</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.706293,104.076965', '晓梅')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="羊子山路8号">兴鑫</td>
+        <td data-address="羊子山路8号">兴鑫印务</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.703976,104.09408', '兴鑫')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="双荆路8号">杨程</td>
+        <td data-address="双荆路8号">杨程广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.712077,104.09299', '杨程')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="双荆路8号">锦西</td>
+        <td data-address="双荆路8号">锦西婚纱摄影</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.713112,104.092348', '锦西')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="三河大道46号">新丽</td>
+        <td data-address="三河大道46号">新丽照相馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.777932,104.133468', '新丽')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="江陵路122号">盛博&凤凰</td>
+        <td data-address="江陵路122号">盛博广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.779054,104.138456', '盛博&凤凰')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="明月中心村72号">新容</td>
+        <td data-address="明月中心村72号">新蓉像馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.763311,104.116865', '新容')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="明月中心村72号">人艺</td>
+        <td data-address="明月中心村72号">新蓉像馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.763311,104.116865', '人艺')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="荆翠东路247号">双益</td>
+        <td data-address="荆翠东路247号">双益广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.714648,104.115871', '双益')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="东紫路480">新闻</td>
+        <td data-address="东紫路480">新闻照相馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.71144,104.109687', '新闻')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="东泰路21号">争鸣</td>
+        <td data-address="东泰路21号">争鸣印务广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.704786,104.116121', '争鸣')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="致强路317号">梅宇</td>
+        <td data-address="致强路317号">梅宇摄影</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.702941,104.112866', '梅宇')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="云龙路53号">子扬</td>
+        <td data-address="云龙路53号">子扬电脑.照相</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.700781,104.108987', '子扬')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="致祥路9号">小杨</td>
+        <td data-address="致祥路9号">晓艺杨摄影部</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.701433,104.108366', '小杨')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="致顺南一街23号">顺程</td>
+        <td data-address="致顺南一街23号">顺程广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.698538,104.10731', '顺程')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="怡福路91号">金磊</td>
+        <td data-address="怡福路91号">金磊数码影像</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.685921,104.107604', '金磊')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="桃蹊路143号">新意</td>
+        <td data-address="桃蹊路143号">新意图文广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.681896,104.109155', '新意')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="桃溪路27号">凡橙艺新</td>
+        <td data-address="桃溪路27号">凡橙艺新广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.680539,104.106891', '凡橙艺新')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="建设北路二段5号">沙河</td>
+        <td data-address="建设北路二段5号">沙河印务</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.678531,104.100663', '沙河')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="建设北路二段5号">东院</td>
+        <td data-address="建设北路二段5号">东院印务</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.678531,104.100663', '东院')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="建设北路二段5号">科太</td>
+        <td data-address="建设北路二段5号">科太.新艺洋</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.678531,104.100663', '科太')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="一环路东一段194">欣彩</td>
+        <td data-address="一环路东一段194">欣彩照相馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.67298,104.097793', '欣彩')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="一环路东一段172">先锋</td>
+        <td data-address="一环路东一段172">先锋印务</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.672464,104.098025', '先锋')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="一环路东一段**">飞腾</td>
+        <td data-address="一环路东一段**">飞腾</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.664192,104.101443', '飞腾')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="建设巷1号-34">华业</td>
+        <td data-address="建设巷1号-34">潘达蒸汽.华业</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.67145,104.103157', '华业')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="建设路43号附9号">美丽魅</td>
+        <td data-address="建设路43号附9号">美丽魅摄影</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.669269,104.103414', '美丽魅')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="建设北路三段11号">中标</td>
+        <td data-address="建设北路三段11号">中标工程图文</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.676988,104.113067', '中标')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="建兴路15号">雪儿</td>
+        <td data-address="建兴路15号">雪儿像馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.671486,104.116983', '雪儿')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="枫林路47号">欣昇</td>
+        <td data-address="枫林路47号">欣昇图文</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.672215,104.123234', '欣昇')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="建设南新路83号">相片</td>
+        <td data-address="建设南新路83号">相片工作室</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.665807,104.105045', '相片')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="二环路东三段2号">秀婷</td>
+        <td data-address="二环路东三段2号">秀婷相馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.662236,104.114012', '秀婷')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="东秀一路209号">挚爱婚庆</td>
+        <td data-address="东秀一路209号">挚爱.登记所旁边</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.661453,104.118279', '挚爱婚庆')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="双庆路49号">王子</td>
+        <td data-address="双庆路49号">王子照相馆</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.651083,104.121411', '王子')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="东校场街45号">零点</td>
+        <td data-address="东校场街45号">零点广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.663269,104.08937', '零点')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="桂王桥北街25号">胜慧</td>
+        <td data-address="桂王桥北街25号">胜慧图文广告</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.664161,104.083868', '胜慧')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="望平街165号">源海</td>
+        <td data-address="望平街165号">源海数码印刷</td>
+        <td><button class="navigate-button"  onclick="navigateToAmap('30.65672,104.091311', '源海')">导航</button></td>
+    </tr>
+
+
+
+
+        <!-- 其他表格行... -->
+    </table>
+
+    <!-- 第二个表格 -->
+    <table id="table2" style="display: none;">
+        <tr>
+            <th>名称</th>
+            <th>店铺名</th>
+            <th>导航</th>
+        </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="马家花园路21号附3号">兴怡</td>
+        <td data-address="马家花园路21号附3号">诚信广告图文(兴怡)</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.683824,104.052255', '兴怡')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="一环路北二段3号">宏艺</td>
+        <td data-address="一环路北二段3号">宏艺房产</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.68606,104.062586', '宏艺')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="一环路北一段390号">燚龙</td>
+        <td data-address="一环路北一段390号">照相·广告(燚yi龙)</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.685825,104.058046', '燚龙')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="一环路北一段360号">西北桥忆影</td>
+        <td data-address="一环路北一段360号">忆影艺术摄影室</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.685794,104.057747', '西北桥忆影')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="九里堤南路82号对面">新晨</td>
+        <td data-address="九里堤南路82号对面">新晨印务</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.693369,104.057136', '新晨')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="圃园南二路6号附30号">芳苑</td>
+        <td data-address="圃园南二路6号附30号">芳苑数码影像</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.691302,104.053751', '芳苑')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="沙湾路53号附2号">永兴</td>
+        <td data-address="沙湾路53号附2号">永兴图文广告</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.688026,104.051701', '永兴')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="沙湾路53号">新捷</td>
+        <td data-address="沙湾路53号">新捷影像图片社</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.687717,104.051583', '新捷')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="沙湾路108号">佳捷</td>
+        <td data-address="沙湾路108号">佳捷印务</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.68652,104.051502', '佳捷')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="光荣北路80号-附3号">新华</td>
+        <td data-address="光荣北路80号-附3号">新华图片社</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.687385,104.048785', '新华')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="金沙路42号附19号">泰桦</td>
+        <td data-address="金沙路42号附19号">泰桦广告</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.687578,104.044831', '泰桦')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="金沙巷16号附12号">贝尔</td>
+        <td data-address="金沙巷16号附12号">贝尔数码冲印店</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.690074,104.042601', '贝尔')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="营门口路146号">帆摄影</td>
+        <td data-address="营门口路146号">精美图片(帆摄影)</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.685121,104.041844', '帆摄影')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="营抚琴街1号附15号">风摄影</td>
+        <td data-address="营抚琴街1号附15号">柯达风摄影数码</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.679623,104.0424', '风摄影')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="营兴街72号">咔嚓</td>
+        <td data-address="营兴街72号">咔嚓摄影</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.683043,104.036237', '咔嚓')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="营康西路34号">外化</td>
+        <td data-address="营康西路34号">外化影星照相馆</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.687313,104.033966', '外化')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="蜀营街55号附1号">同缘</td>
+        <td data-address="蜀营街55号附1号">同缘印务</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.68669,104.033055', '同缘')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="蜀兴东街8号">凯骡(拍爱)</td>
+        <td data-address="蜀兴东街8号">拍爱照相馆(凯骡)</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.685301,104.02965', '凯骡(拍爱)')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="营康西路136号">恒峰</td>
+        <td data-address="营康西路136号">恒峰广告</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.68893,104.031425', '恒峰')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="五里墩横街107号">友谊1</td>
+        <td data-address="五里墩横街107号">永谊照相馆(友谊1)</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.689541,104.033039', '友谊1')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="五里墩路73号">奥林</td>
+        <td data-address="五里墩路73号">奥体照相馆</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.691093,104.030803', '奥林')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="茶店子街道茶店子东街48附5号">亿合</td>
+        <td data-address="茶店子街道茶店子东街48附5号">亿合广告印务</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.693844,104.032701', '亿合')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="茶店子东街156号">芊芊米兰</td>
+        <td data-address="茶店子东街156号">米兰婚纱摄影</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.694786,104.031276', '芊芊米兰')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="银沙横街14号">银沙</td>
+        <td data-address="银沙横街14号">锦西照相馆(银沙店)</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.695218,104.045288', '银沙')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="银沙北街71号">创意4</td>
+        <td data-address="银沙北街71号">创意像馆4</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.697072,104.043214', '创意4')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="银沙街122号">华域</td>
+        <td data-address="银沙街122号">华域广告印务</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.699797,104.041673', '华域')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="长庆路1号">长庆路锦西</td>
+        <td data-address="长庆路1号">锦西数码冲印部</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.704827,104.034523', '长庆路锦西')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="长庆路6号附4号">友谊2</td>
+        <td data-address="长庆路6号附4号">友谊照相复印2</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.705707,104.036829', '友谊2')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="星河路27号附40号">创意1</td>
+        <td data-address="星河路27号附40号">创意摄影1</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.707136,104.042998', '创意1')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="星辰路47号">鸿达</td>
+        <td data-address="星辰路47号">鸿鸿照相馆(鸿达)</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.704736813673435,104.04559978661948', '鸿达')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="交桂路89号付50号">飞彩</td>
+        <td data-address="交桂路89号付50号">飞彩数码图片社</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.70291,104.048886', '飞彩')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="九里堤北路6号附16号">创意3</td>
+        <td data-address="九里堤北路6号附16号">创意相馆3</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.705538,104.054123', '创意3')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="星河路89号">前沿</td>
+        <td data-address="星河路89号">前沿数码摄影</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.707496,104.046565', '前沿')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="星汉路7号附7号">瞳馨</td>
+        <td data-address="星汉路7号附7号">瞳馨照相馆</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.708566,104.048428', '瞳馨')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="星汉路12号附12号">创意2</td>
+        <td data-address="星汉路12号附12号">创意摄影2</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.710017,104.048005', '创意2')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="小市巷90号">艺影5</td>
+        <td data-address="小市巷90号">艺影照相馆</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.700951,104.074751', '艺影5')">导航</button></td>
+    </tr>
+
+    <tr>
+        <td style="color: blue;" data-address="福祥街51号">蜀人</td>
+        <td data-address="福祥街51号">蜀人像馆</td>
+        <td><button  class="navigate-button" onclick="navigateToAmap('30.704793,104.072563', '蜀人')">导航</button></td>
+    </tr>
+
+        <!-- 其他表格行... -->
+    </table>
+
+    <script>
+        function toggleTable(tableNumber) {
+            // 隐藏所有表格
+            document.getElementById('table1').style.display = 'none';
+            document.getElementById('table2').style.display = 'none';
+
+            // 根据传入的tableNumber显示相应表格
+            if (tableNumber === 1) {
+                document.getElementById('table1').style.display = 'table';
+                document.getElementById('table2').style.display = 'none';
+            } else if (tableNumber === 2) {
+                document.getElementById('table2').style.display = 'table';
+                document.getElementById('table1').style.display = 'none';
+            }
+        }
+
+    function navigateToAmap(destinationCoordinates, destinationName) {
+        var amapUrl = 'amapuri://openFeature?featureName=OnRideNavi&rideType=elebike&sourceApplication=appname&lat=' + destinationCoordinates.split(',')[0] + '&lon=' + destinationCoordinates.split(',')[1] + '&dev=0';
+        window.location.href = amapUrl;
+    }
+    </script>
+</body>
+
+</html>
